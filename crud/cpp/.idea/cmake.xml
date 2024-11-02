@@ -2,7 +2,14 @@
 <project version="4">
   <component name="CMakeSharedSettings">
     <configurations>
-      <configuration PROFILE_NAME="Debug-Visual Studio" ENABLED="true" GENERATION_DIR="build" CONFIG_NAME="Debug" TOOLCHAIN_NAME="Visual Studio" NO_GENERATOR="true">
+      <configuration PROFILE_NAME="Debug" ENABLED="true" GENERATION_DIR="build" CONFIG_NAME="Debug" TOOLCHAIN_NAME="Visual Studio" NO_GENERATOR="true">
+        <ADDITIONAL_GENERATION_ENVIRONMENT>
+          <envs>
+            <env name="SRC_PATH" value="$PROJECT_DIR$/../../.." />
+          </envs>
+        </ADDITIONAL_GENERATION_ENVIRONMENT>
+      </configuration>
+      <configuration PROFILE_NAME="O3" ENABLED="true" GENERATION_DIR="build-release" CONFIG_NAME="Release" TOOLCHAIN_NAME="Visual Studio" BUILD_OPTIONS="-- /p:Optimize=true" NO_GENERATOR="true">
         <ADDITIONAL_GENERATION_ENVIRONMENT>
           <envs>
             <env name="SRC_PATH" value="$PROJECT_DIR$/../../.." />

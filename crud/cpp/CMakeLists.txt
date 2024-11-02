@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 
 project(crud)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 
@@ -15,6 +15,11 @@ endif()
 
 set(RAPIDJSON_INCLUDE_DIR "${BASE_PATH}/rapidjson/include")
 include_directories(${RAPIDJSON_INCLUDE_DIR})
+
+
+set(NLOHMANN_INCLUDE_DIR "${BASE_PATH}/json/single_include")
+include_directories(${NLOHMANN_INCLUDE_DIR})
+
 
 add_executable(crud src/main.cpp)
 

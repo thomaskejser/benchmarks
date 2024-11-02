@@ -10,14 +10,24 @@
     <option name="reloaded" value="true" />
   </component>
   <component name="CMakeRunConfigurationManager">
-    <generated />
+    <generated>
+      <config projectName="crud" targetName="crud" />
+    </generated>
   </component>
   <component name="CMakeSettings">
     <configurations />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bc30f3ee-7fb2-46fd-8977-ac636c8dbb55" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../python/.gitignore.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../python/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../python/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../python/results.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/cmake.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cmake.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,7 +37,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug-Visual Studio" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:O3" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
@@ -71,28 +81,43 @@
       <recent name="C:\source\benchmarks\crud\cpp\src" />
     </key>
   </component>
-  <component name="RunManager" selected="CMake Application.crud - async">
+  <component name="RunManager" selected="CMake Application.crud - json">
     <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="CLION.EXTERNAL.BUILD" enabled="true" />
       </method>
     </configuration>
-    <configuration name="crud - all" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="1000000 all" REDIRECT_INPUT="false" ELEVATE="true" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug-Visual Studio" RUN_TARGET_PROJECT_NAME="crud" RUN_TARGET_NAME="crud" EXPLICIT_BUILD_TARGET_NAME="all">
+    <configuration name="crud - all" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="1000000 all" REDIRECT_INPUT="false" ELEVATE="true" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="crud" RUN_TARGET_NAME="crud" EXPLICIT_BUILD_TARGET_NAME="all">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="crud - async" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="10000000 async" REDIRECT_INPUT="false" ELEVATE="true" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug-Visual Studio" RUN_TARGET_PROJECT_NAME="crud" RUN_TARGET_NAME="crud" EXPLICIT_BUILD_TARGET_NAME="all">
+    <configuration name="crud - async" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="10000000 async" REDIRECT_INPUT="false" ELEVATE="true" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="crud" RUN_TARGET_NAME="crud" EXPLICIT_BUILD_TARGET_NAME="all">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="crud - process" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="1000000 process" REDIRECT_INPUT="false" ELEVATE="true" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug-Visual Studio" RUN_TARGET_PROJECT_NAME="crud" RUN_TARGET_NAME="crud" EXPLICIT_BUILD_TARGET_NAME="all">
+    <configuration name="crud - json" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="1000000 json" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="crud" RUN_TARGET_NAME="crud" EXPLICIT_BUILD_TARGET_NAME="all">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="crud - thread" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="10000000 thread" REDIRECT_INPUT="false" ELEVATE="true" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug-Visual Studio" RUN_TARGET_PROJECT_NAME="crud" RUN_TARGET_NAME="crud" EXPLICIT_BUILD_TARGET_NAME="all">
+    <configuration name="crud - process" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="1000000 process" REDIRECT_INPUT="false" ELEVATE="true" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="crud" RUN_TARGET_NAME="crud" EXPLICIT_BUILD_TARGET_NAME="all">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="crud - simple" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="1000000 simple" REDIRECT_INPUT="false" ELEVATE="true" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="crud" RUN_TARGET_NAME="crud" EXPLICIT_BUILD_TARGET_NAME="all">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="crud - thread" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="10000000 thread" REDIRECT_INPUT="false" ELEVATE="true" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="crud" RUN_TARGET_NAME="crud" EXPLICIT_BUILD_TARGET_NAME="all">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="crud" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="crud" TARGET_NAME="crud" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="crud" RUN_TARGET_NAME="crud">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -101,7 +126,10 @@
       <item itemvalue="CMake Application.crud - process" />
       <item itemvalue="CMake Application.crud - thread" />
       <item itemvalue="CMake Application.crud - async" />
+      <item itemvalue="CMake Application.crud - json" />
       <item itemvalue="CMake Application.crud - all" />
+      <item itemvalue="CMake Application.crud - simple" />
+      <item itemvalue="CMake Application.crud" />
     </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -112,7 +140,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1730537829445</updated>
-      <workItem from="1730537830647" duration="15270000" />
+      <workItem from="1730537830647" duration="21313000" />
     </task>
     <servers />
   </component>

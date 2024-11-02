@@ -6,8 +6,9 @@
 #include <thread>
 #include <future>
 #include <windows.h>
-
-
+#include <sstream>
+#include <string_view>
+#include <nlohmann/json.hpp>
 #include <rapidjson/document.h>
 #include <rapidjson/writer.h>
 #include <rapidjson/stringbuffer.h>
@@ -41,6 +42,13 @@ void touch_data(unsigned process_number, std::vector<T>& result) {
 template<>
 void touch_data(unsigned process_number, std::vector<std::string>& result) {
     auto last_value = result.back();
+    std::lock_guard<std::mutex> lock(control);
+    last_elements.push_back(last_value);
+}
+
+template<>
+void touch_data(unsigned process_number, std::vector<std::string_view>& result) {
+    auto last_value = std::string(result.back());
     std::lock_guard<std::mutex> lock(control);
     last_elements.push_back(last_value);
 }
@@ -125,7 +133,7 @@ void async_mutex(unsigned iterations, unsigned over_subscribe = 1) {
 }
 
 
-void simple_json_loop(unsigned iterations) {
+void simple_json_rapid_loop(unsigned iterations) {
     /* Optimise: We can allocate everything needed outside the hot loop */
     rapidjson::Document document;
     document.SetObject();
@@ -153,13 +161,80 @@ void simple_json_loop(unsigned iterations) {
     touch_data(0, results);
 }
 
-void simple_json(int iterations) {
+
+void simple_json_lohmann_loop(unsigned iterations) {
+    /* Make it simple, make it fast */
+
+    std::vector<std::string> results;
+    nlohmann::json j;
+
+    for (unsigned i = 0; i < iterations; ++i) {
+        data_t value_read = -1;
+        if (i % 10 == 0) {
+            value += 1;
+            value_read = value;
+        }
+        else {
+            value_read = value;
+        }
+
+        j["value"]= value_read;
+        results.push_back(j.dump());
+    }
+    touch_data(0, results);
+}
+
+void simple_json_kejser_loop(unsigned iterations) {
+    /* Make it simple, make it fast */
+
+    std::vector<std::string_view> results;
+
+    char buffer[] = "{\"value\"}:";
+
+    for (unsigned i = 0; i < iterations; ++i) {
+        data_t value_read = -1;
+        if (i % 10 == 0) {
+            value += 1;
+            value_read = value;
+        }
+        else {
+            value_read = value;
+        }
+        std::string foo = "";
+//        s.str("");
+//        s << "{\"value\":" << value_read << "}";
+//        results.push_back(s.str());
+        std::string_view s(buffer, 5);
+        results.push_back(s);
+    }
+    touch_data(0, results);
+}
+
+
+void simple_json_rapid(int iterations) {
     value = 0;
     auto start_time = std::chrono::high_resolution_clock::now();
-    simple_json_loop(iterations);
+    simple_json_rapid_loop(iterations);
     auto end_time = std::chrono::high_resolution_clock::now();
     return write_result("Single Thread JSON", iterations, end_time - start_time);
 }
+
+void simple_json_lohmann(int iterations) {
+    value = 0;
+    auto start_time = std::chrono::high_resolution_clock::now();
+    simple_json_rapid_loop(iterations);
+    auto end_time = std::chrono::high_resolution_clock::now();
+    return write_result("Single Thread JSON", iterations, end_time - start_time);
+}
+
+void simple_json_kejser(int iterations) {
+    value = 0;
+    auto start_time = std::chrono::high_resolution_clock::now();
+    simple_json_kejser_loop(iterations);
+    auto end_time = std::chrono::high_resolution_clock::now();
+    return write_result("Single Thread JSON", iterations, end_time - start_time);
+}
+
 
 void simple_int_loop(unsigned iterations) {
     std::vector<data_t> results;
@@ -318,6 +393,12 @@ void processes(unsigned iterations, unsigned over_subscribe = 1) {
 
 }
 
+void validate() {
+    for (auto& e : last_elements) {
+        std::cout << e << std::endl;
+    }
+}
+
 int main(int argc, char* argv[]) {
     if (argc > 1 && std::string(argv[1]) == "--child") {
         // We were spawned by the process runner
@@ -350,7 +431,9 @@ int main(int argc, char* argv[]) {
         simple_int(iterations);
     }
     else if (mode == "json") {
-        simple_json(iterations);
+        //simple_json_lohmann(iterations);
+        // simple_json_rapid(iterations);
+        simple_json_kejser(iterations);
     }
     else if (mode == "async") {
         for (unsigned i = 1; i <= 64; i*=2) {
@@ -361,7 +444,7 @@ int main(int argc, char* argv[]) {
         processes(iterations);
         thread_mutex(iterations);
         simple_int(iterations);
-        simple_json(iterations);
+        simple_json_rapid(iterations);
         async_mutex(iterations);
     }
     else {
@@ -369,6 +452,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    validate();
     return 0;
 }
 
