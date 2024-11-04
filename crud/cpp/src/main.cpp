@@ -15,6 +15,7 @@
 #include <atomic>
 #include <algorithm>
 #include <cstring>
+#include "terje_itoa.hpp"
 
 typedef int64_t data_t;
 
@@ -24,12 +25,13 @@ std::vector<std::string> last_elements;
 
 void write_result(std::string test, unsigned iterations, std::chrono::duration<double> duration) {
 
-    std::ofstream csv_file("benchmark_results.csv");
+    std::ofstream csv_file("benchmark.csv", std::ios::app);
     auto secs = duration.count();
     auto ops_per_sec = int(iterations / secs);
-    std::cout << test << ": Elapsed time: " << secs << " seconds" << " OPS/sec " << ops_per_sec <<
-    std::endl;
-    csv_file << test << "|" << std::to_string(ops_per_sec) << "\n";
+    csv_file << "c++" << "|"
+        << test << "|"
+        << std::to_string(ops_per_sec) << "|"
+        << last_elements.back() << "\n";
 }
 
 template<typename T>
@@ -43,11 +45,11 @@ template<>
 void touch_data(unsigned process_number, std::vector<std::string>& result) {
     auto last_value = result.back();
     std::lock_guard<std::mutex> lock(control);
-    last_elements.push_back(last_value);
+    last_elements.push_back(std::string(last_value));
 }
 
 template<>
-void touch_data(unsigned process_number, std::vector<std::string_view>& result) {
+void touch_data(unsigned process_number, std::vector<char*>& result) {
     auto last_value = std::string(result.back());
     std::lock_guard<std::mutex> lock(control);
     last_elements.push_back(last_value);
@@ -139,10 +141,12 @@ void simple_json_rapid_loop(unsigned iterations) {
     document.SetObject();
     rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
     document.AddMember("value", rapidjson::Value(), allocator);
+    rapidjson::StringBuffer buffer;
 
     std::vector<std::string> results;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
     for (unsigned i = 0; i < iterations; ++i) {
-        data_t value_read = -1;
+        data_t value_read;
         if (i % 10 == 0) {
             value += 1;
             value_read = value;
@@ -153,8 +157,7 @@ void simple_json_rapid_loop(unsigned iterations) {
 
         document["value"].SetInt64(value_read);
 
-        rapidjson::StringBuffer buffer;
-        rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+        buffer.Clear();
         document.Accept(writer);
         results.push_back(buffer.GetString());
     }
@@ -187,9 +190,10 @@ void simple_json_lohmann_loop(unsigned iterations) {
 void simple_json_kejser_loop(unsigned iterations) {
     /* Make it simple, make it fast */
 
-    std::vector<std::string_view> results;
+    std::vector<char*> results;
 
-    char buffer[] = "{\"value\"}:";
+    /* Placeholder template we can blast itoa into and assume we have zero pad */
+    char buffer[] = "{\"value\":0000000000}";
 
     for (unsigned i = 0; i < iterations; ++i) {
         data_t value_read = -1;
@@ -200,12 +204,8 @@ void simple_json_kejser_loop(unsigned iterations) {
         else {
             value_read = value;
         }
-        std::string foo = "";
-//        s.str("");
-//        s << "{\"value\":" << value_read << "}";
-//        results.push_back(s.str());
-        std::string_view s(buffer, 5);
-        results.push_back(s);
+        itoa(buffer+9, (uint32_t)value_read);
+        results.push_back(buffer);
     }
     touch_data(0, results);
 }
@@ -216,10 +216,18 @@ void simple_json_rapid(int iterations) {
     auto start_time = std::chrono::high_resolution_clock::now();
     simple_json_rapid_loop(iterations);
     auto end_time = std::chrono::high_resolution_clock::now();
-    return write_result("Single Thread JSON", iterations, end_time - start_time);
+    return write_result("JSON (RapidJSON)", iterations, end_time - start_time);
 }
 
 void simple_json_lohmann(int iterations) {
+    value = 0;
+    auto start_time = std::chrono::high_resolution_clock::now();
+    simple_json_lohmann(iterations);
+    auto end_time = std::chrono::high_resolution_clock::now();
+    return write_result("JSON (Lohmann)", iterations, end_time - start_time);
+}
+
+void simple_json(int iterations) {
     value = 0;
     auto start_time = std::chrono::high_resolution_clock::now();
     simple_json_rapid_loop(iterations);
@@ -227,12 +235,13 @@ void simple_json_lohmann(int iterations) {
     return write_result("Single Thread JSON", iterations, end_time - start_time);
 }
 
+
 void simple_json_kejser(int iterations) {
     value = 0;
     auto start_time = std::chrono::high_resolution_clock::now();
     simple_json_kejser_loop(iterations);
     auto end_time = std::chrono::high_resolution_clock::now();
-    return write_result("Single Thread JSON", iterations, end_time - start_time);
+    return write_result("JSON (Kejser)", iterations, end_time - start_time);
 }
 
 
@@ -431,8 +440,9 @@ int main(int argc, char* argv[]) {
         simple_int(iterations);
     }
     else if (mode == "json") {
-        //simple_json_lohmann(iterations);
-        // simple_json_rapid(iterations);
+        simple_json(iterations);
+        simple_json_lohmann(iterations);
+        simple_json_rapid(iterations);
         simple_json_kejser(iterations);
     }
     else if (mode == "async") {
@@ -452,7 +462,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    validate();
+    // validate();
     return 0;
 }
 

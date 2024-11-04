@@ -10,20 +10,19 @@ import orjson
 class Benchmark:
     value = 0
     lock = threading.Lock()
-    last_elements = []
+    last_element = None
 
     @classmethod
     def write_result(cls, test: str, iterations: int, duration: float):
         ops_per_sec = int(iterations / duration)
-        print(f"{test}: Elapsed time: {duration} seconds, OPS/sec: {ops_per_sec}")
-        with open("results.csv", "a") as csv_file:
+        # print(f"{test}: Elapsed time: {duration:.3f} seconds, OPS/sec: {ops_per_sec}")
+        with open("benchmark.csv", "a", newline="") as csv_file:
             csv_writer = csv.writer(csv_file, delimiter='|')
-            csv_writer.writerow([test, ops_per_sec])
+            csv_writer.writerow(["python", test, ops_per_sec, cls.last_element])
 
     @classmethod
     def thread_mutex_loop(cls, iterations: int, mtx: threading.Lock):
         results = []
-
         with mtx:
             while Benchmark.value < 0:
                 pass
@@ -37,11 +36,12 @@ class Benchmark:
                     value_read = Benchmark.value
             results.append(value_read)
 
+
     @classmethod
     def thread_mutex(cls, iterations: int, over_subscribe: int = 1):
         mtx = threading.Lock()
         concurrency = os.cpu_count() * over_subscribe
-        sub_iterations = iterations // concurrency
+        sub_iterations = max(1, iterations // concurrency)
         threads = []
 
         Benchmark.value = -1
@@ -60,6 +60,7 @@ class Benchmark:
             t.join()
 
         end_time = time.perf_counter()
+        cls.last_element = Benchmark.value
         Benchmark.write_result(f"Thread (mutex, oversub={over_subscribe})", iterations, end_time - start_time)
 
     @classmethod
@@ -91,6 +92,7 @@ class Benchmark:
         start_time = time.perf_counter()
         await asyncio.gather(*tasks)
         end_time = time.perf_counter()
+        cls.last_element = Benchmark.value
         Benchmark.write_result(f"Async (mutex, oversub: {over_subscribe})", iterations, end_time - start_time)
 
     @classmethod
@@ -103,6 +105,8 @@ class Benchmark:
             else:
                 value_read = Benchmark.value
             results.append(value_read)
+        cls.last_element = results[-1]
+
 
     @classmethod
     def simple_json_loop(cls, iterations: int):
@@ -115,6 +119,7 @@ class Benchmark:
                 value_read = Benchmark.value
             json = orjson.dumps({"value": value_read})
             results.append(json.decode("utf-8"))
+        cls.last_element = results[-1]
 
 
     @classmethod
@@ -139,7 +144,6 @@ class Benchmark:
                      lock: multiprocessing.Lock,
                      shared_memory: multiprocessing.Value):
         results = []
-
         # Wait for start signal
         while shared_memory.value < 0:
             pass
@@ -153,6 +157,7 @@ class Benchmark:
                     value_read = shared_memory.value
 
             results.append(value_read)
+        # cls.last_element = results[-1]
 
     @classmethod
     def processes(cls, iterations: int, over_subscribe: int = 1):
@@ -177,6 +182,7 @@ class Benchmark:
             p.join()
 
         end_time = time.perf_counter()
+        cls.last_element = value.value
         Benchmark.write_result(f"Process (Lock, oversub={over_subscribe})", iterations, end_time - start_time)
 
 
@@ -196,7 +202,7 @@ def main():
     elif mode == "json":
         benchmark.simple_json(iterations)
     elif mode == "process":
-        for i in [1, 2, 4, 8, 16, 32, 64]:
+        for i in [1, 2, 4, 8, 16]:
             benchmark.processes(iterations, i)
     elif mode == "thread":
         for i in [1, 2, 4, 8, 16, 32, 64]:

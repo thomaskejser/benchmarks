@@ -16,7 +16,6 @@ endif()
 set(RAPIDJSON_INCLUDE_DIR "${BASE_PATH}/rapidjson/include")
 include_directories(${RAPIDJSON_INCLUDE_DIR})
 
-
 set(NLOHMANN_INCLUDE_DIR "${BASE_PATH}/json/single_include")
 include_directories(${NLOHMANN_INCLUDE_DIR})
 
@@ -32,4 +31,4 @@ if(WIN32)
     target_compile_definitions(crud PRIVATE WIN32_LEAN_AND_MEAN)
 endif()
 
-set_target_properties(crud PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set_target_properties(crud PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
