@@ -222,7 +222,7 @@ void simple_json_rapid(int iterations) {
 void simple_json_lohmann(int iterations) {
     value = 0;
     auto start_time = std::chrono::high_resolution_clock::now();
-    simple_json_lohmann(iterations);
+    simple_json_lohmann_loop(iterations);
     auto end_time = std::chrono::high_resolution_clock::now();
     return write_result("JSON (Lohmann)", iterations, end_time - start_time);
 }
@@ -440,6 +440,7 @@ int main(int argc, char* argv[]) {
         simple_int(iterations);
     }
     else if (mode == "json") {
+        std::cout  << "Fuck\n";
         simple_json(iterations);
         simple_json_lohmann(iterations);
         simple_json_rapid(iterations);

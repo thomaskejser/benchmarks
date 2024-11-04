@@ -20,8 +20,8 @@ def create_bar_chart(data, output_file: str):
 
     my_languages = {k : v for k,v in languages.items() if k in data["language"].unique()}
 
-    fig, ax = plt.subplots(figsize=(12, 6))
-    bar_width = 5.0 / len(my_languages)
+    fig, ax = plt.subplots(figsize=(6, 12))
+    bar_width = 3.0 / len(my_languages)
     group_spacing = bar_width * len(my_languages) * 1.2
     test_map = {name: i * group_spacing for i, name in enumerate(data['test'].unique())}
 
@@ -39,8 +39,7 @@ def create_bar_chart(data, output_file: str):
                     bar.get_height() - 0.9,
                     label,
                     ha='center',
-                    va='center',
-                    rotation=90,
+                    va='top',
                     color="white"
             )
 
@@ -75,4 +74,4 @@ if __name__ == "__main__":
         # JSON for all languages
         create_bar_chart(data[data['test'].str.contains("single", case=False)], "single.png")
         # JSON experiments with algos
-        create_bar_chart(data[data['test'].str.contains("JSON (", case=False)], "json.png")
+        create_bar_chart(data[data['test'].str.contains("JSON \(", case=False)], "json.png")

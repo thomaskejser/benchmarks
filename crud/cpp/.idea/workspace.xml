@@ -19,19 +19,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bc30f3ee-7fb2-46fd-8977-ac636c8dbb55" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../bench.ps1" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../benchmark.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/terje_itoa.hpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../filtered_data_bar_chart.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../plot/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../plot/__main__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../python/benchmark.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../python/results.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/cmake.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cmake.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../python/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../python/crud.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../plot/__main__.py" beforeDir="false" afterPath="$PROJECT_DIR$/../plot/__main__.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -145,7 +133,7 @@
       <option name="presentableId" value="Default" />
       <updated>1730537829445</updated>
       <workItem from="1730537830647" duration="28304000" />
-      <workItem from="1730749257670" duration="4000" />
+      <workItem from="1730749257670" duration="778000" />
     </task>
     <servers />
   </component>
