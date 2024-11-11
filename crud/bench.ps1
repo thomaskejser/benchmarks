@@ -4,9 +4,9 @@ param (
 )
 
 $out_file = "benchmark.csv"
-$cpp = @{ Path = "./cpp/bin/Release/crud.exe"; Args = @() }
-$python= @{ Path = "python"; Args=@("python/crud.py") }
-$cs = @{ Path = "./cs/bin/Release/crud.exe"; Args = @() }
+$cpp = @{ Name="C++"; Path = "./cpp/bin/Release/crud.exe"; Args = @() }
+$python= @{ Name="Python"; Path = "python"; Args=@("python/crud.py") }
+$cs = @{ Name="C#"; Path = "./cs/bin/Release/crud.exe"; Args = @() }
 
 
 $binaries = @($cpp, $python, $cs)
@@ -17,10 +17,12 @@ Remove-Item $out_file -ErrorAction SilentlyContinue
 Add-Content -Path $out_file -Value "language|test|ops_per_sec|last_value"
 
 foreach ($binary in $binaries) {
+  Write-Output  $binary.Name
   foreach($test in $tests) {
+    Write-Output "...$test $arg"
     & $binary.Path $binary.Args $arg $test 
   }
 }
 
-echo "Results"
-cat $out_file
+Write-Output "Results"
+Get-Content $out_file

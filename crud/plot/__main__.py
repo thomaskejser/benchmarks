@@ -5,7 +5,7 @@ import sys
 from matplotlib.ticker import MaxNLocator, FuncFormatter
 
 languages = {"python": "#306998",
-             "C#": "#68217A",
+             "c#": "#68217A",
              "c++": "#007ACC"
              }
 
@@ -28,20 +28,23 @@ def create_bar_chart(data, output_file: str):
 
     for i, language in enumerate(my_languages.keys()):
         lang = data[data['language'] == language]
+        offset = ((len(my_languages) - 1) * bar_width) / 2
+        # - len(my_languages) / bar_width +
         bars = ax.bar(
-                [test_map[name] + bar_width * i - bar_width / len(my_languages) for name in lang['test']],
+                [test_map[name] + (bar_width * i) - offset for name in lang['test']],
                 lang["ops_per_sec"],
                 color=languages[language],
                 width=bar_width)
-        for bar, label in zip(bars, lang['language']):
-            ax.text(
-                    bar.get_x() + bar.get_width() / 2,
-                    bar.get_height() - 0.9,
-                    label,
-                    ha='center',
-                    va='top',
-                    color="white"
-            )
+
+    for bar, label in zip(bars, lang['language']):
+        ax.text(
+                bar.get_x() + bar.get_width() / 2,
+                bar.get_height() - 0.9,
+                label,
+                ha='center',
+                va='top',
+                color="white"
+        )
 
     ax.yaxis.set_major_locator(MaxNLocator(integer=True))
     ax.yaxis.set_major_formatter(FuncFormatter(lambda x, _: f'{x / 1e6:.0f}M'))
@@ -75,3 +78,6 @@ if __name__ == "__main__":
         create_bar_chart(data[data['test'].str.contains("single", case=False)], "single.png")
         # JSON experiments with algos
         create_bar_chart(data[data['test'].str.contains("JSON \(", case=False)], "json.png")
+        # Process
+        create_bar_chart(data[data['test'].str.contains("process", case=False)], "process.png")
+

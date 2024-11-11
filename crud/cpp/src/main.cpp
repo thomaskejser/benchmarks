@@ -24,7 +24,6 @@ std::mutex control;
 std::vector<std::string> last_elements;
 
 void write_result(std::string test, unsigned iterations, std::chrono::duration<double> duration) {
-
     std::ofstream csv_file("benchmark.csv", std::ios::app);
     auto secs = duration.count();
     auto ops_per_sec = int(iterations / secs);
@@ -321,6 +320,7 @@ void process_loop(unsigned process_number, unsigned iterations) {
             ReleaseSemaphore(hSemaphore, 1, NULL);          // Unlock
         }
 
+
         result.push_back(value);
     }
 
@@ -387,14 +387,17 @@ void processes(unsigned iterations, unsigned over_subscribe = 1) {
     auto start_time = std::chrono::high_resolution_clock::now();
     ReleaseSemaphore(hSemaphore, 1, NULL);
 
+
     for (const auto& pi : processes) {
         WaitForSingleObject(pi.hProcess, INFINITE);
         CloseHandle(pi.hProcess);
         CloseHandle(pi.hThread);
     }
+    last_elements.push_back(std::string("EOF"));
     auto end_time = std::chrono::high_resolution_clock::now();
-    write_result("Process (Semaphore, oversub=" + std::to_string(over_subscribe) + ")", iterations,  end_time -
-    start_time);
+    write_result("Process (Semaphore, oversub=" + std::to_string(over_subscribe) + ")",
+                 iterations,
+                 end_time - start_time);
 
     UnmapViewOfFile(hSharedData);
     CloseHandle(hMapFile);
@@ -426,6 +429,7 @@ int main(int argc, char* argv[]) {
     int iterations = std::stoi(argv[1]);
     std::string mode = argv[2];
 
+
     if (mode == "process") {
         for (unsigned i = 1; i <= 64; i*=2) {
             processes(iterations, i);
@@ -440,7 +444,6 @@ int main(int argc, char* argv[]) {
         simple_int(iterations);
     }
     else if (mode == "json") {
-        std::cout  << "Fuck\n";
         simple_json(iterations);
         simple_json_lohmann(iterations);
         simple_json_rapid(iterations);
@@ -459,7 +462,7 @@ int main(int argc, char* argv[]) {
         async_mutex(iterations);
     }
     else {
-        std::cerr << "Invalid mode." << std::endl;
+        std::cerr << "Invalid mode: " << mode << std::endl;
         return 1;
     }
 
